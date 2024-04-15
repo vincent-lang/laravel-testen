@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Price;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -14,7 +15,8 @@ class ProductTest extends TestCase
 
     public function test_homepage_contains_empty_table(): void
     {
-        $response = $this->get('/products');
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)->get('/products');
 
         $response->assertStatus(200);
         $response->assertSee(__('Er zijn geen producten.'));
@@ -22,6 +24,7 @@ class ProductTest extends TestCase
 
     public function test_homepage_contains_non_empty_table(): void
     {
+        $user = User::factory()->create();
         $product = Product::create([
             'name' => 'melk',
             'price_id' => 1,
@@ -35,7 +38,7 @@ class ProductTest extends TestCase
             'updated_at' => now()
         ]);
 
-        $response = $this->get('/products');
+        $response = $this->actingAs($user)->get('/products');
 
         $response->assertStatus(200);
         $response->assertDontSee(__('Er zijn geen producten.'));
@@ -46,12 +49,13 @@ class ProductTest extends TestCase
     }
     public function test_homepage_products_table_doesnt_contain_11th_record(): void
     {
+        $user = User::factory()->create();
         $products = Product::factory(11)->create();
         $lastProduct = $products->last();
 
         Price::factory(5)->create();
 
-        $response = $this->get('/products');
+        $response = $this->actingAs($user)->get('/products');
 
         $response->assertStatus(200);
         $response->assertDontSee(__('Er zijn geen producten.'));
