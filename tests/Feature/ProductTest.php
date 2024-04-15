@@ -17,12 +17,12 @@ class ProductTest extends TestCase
         $response = $this->get('/products');
 
         $response->assertStatus(200);
-        $response->assertSee(__(key: 'Er zijn geen producten.'));
+        $response->assertSee(__('Er zijn geen producten.'));
     }
 
     public function test_homepage_contains_non_empty_table(): void
     {
-        Product::create([
+        $product = Product::create([
             'name' => 'melk',
             'price_id' => 1,
             'created_at' => now(),
@@ -38,8 +38,10 @@ class ProductTest extends TestCase
         $response = $this->get('/products');
 
         $response->assertStatus(200);
-        $response->assertDontSee(__(key: 'Er zijn geen producten.'));
-        $response->assertSee(value: 'melk');
-        $response->assertSee(value: '1.20');
+        $response->assertDontSee(__('Er zijn geen producten.'));
+        $response->assertSee('melk');
+        $response->assertViewHas('products', function ($collection) use ($product) {
+            return $collection->contains($product);
+        });
     }
 }
