@@ -39,5 +39,7 @@ class ProductTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertDontSee(__(key: 'Er zijn geen producten.'));
+        $response->assertSee(value: 'melk');
+        $response->assertSee(value: '1.20');
     }
 }
