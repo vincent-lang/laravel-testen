@@ -13,11 +13,6 @@ class ProductTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function setUp(): void
-    {
-        $user = User::factory()->create();
-    }
-
     public function test_homepage_contains_empty_table(): void
     {
         $user = User::factory()->create();
@@ -61,6 +56,22 @@ class ProductTest extends TestCase
         Price::factory(5)->create();
 
         $response = $this->actingAs($user)->get('/products');
+
+        $response->assertStatus(200);
+        $response->assertDontSee(__('Er zijn geen producten.'));
+        $response->assertViewHas('products', function ($collection) use ($lastProduct) {
+            return $collection->contains($lastProduct);
+        });
+    }
+    public function test_admin_can_access_product_create_page(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $products = Product::factory(11)->create();
+        $lastProduct = $products->last();
+
+        Price::factory(5)->create();
+
+        $response = $this->actingAs($admin)->get('/products');
 
         $response->assertStatus(200);
         $response->assertDontSee(__('Er zijn geen producten.'));
