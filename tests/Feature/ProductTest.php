@@ -86,4 +86,12 @@ class ProductTest extends TestCase
         $response = $this->actingAs($admin)->get('/products');
         $response->assertStatus(302);
     }
+
+    private function test_product_actually_removed(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $response = $this->actingAs($admin)->get('/products');
+        $response->assertStatus(302);
+        $this->assertCount(0, Product::count());
+    }
 }
