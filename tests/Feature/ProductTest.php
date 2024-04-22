@@ -13,6 +13,11 @@ class ProductTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function setUp(): void
+    {
+        $user = User::factory()->create();
+    }
+
     public function test_homepage_contains_empty_table(): void
     {
         $user = User::factory()->create();
