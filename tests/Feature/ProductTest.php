@@ -79,4 +79,11 @@ class ProductTest extends TestCase
             return $collection->contains($lastProduct);
         });
     }
+
+    private function test_admin_sees_products(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $response = $this->actingAs($admin)->get('/products');
+        $response->assertStatus(302);
+    }
 }
