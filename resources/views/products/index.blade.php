@@ -22,6 +22,7 @@
                     <tr>
                         <td>{{$product->name}}</td>
                         <td>{{$product->price->price}}</td>
+                        <td><a href="#">Edit</a></td>
                     </tr>
                     @empty
                     <tr>
