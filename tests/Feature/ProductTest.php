@@ -75,6 +75,7 @@ class ProductTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertDontSee(__('Er zijn geen producten.'));
+        $response->assertDatabaseHas('products', $products);
         $response->assertViewHas('products', function ($collection) use ($lastProduct) {
             return $collection->contains($lastProduct);
         });
