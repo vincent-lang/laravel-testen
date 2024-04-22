@@ -100,4 +100,12 @@ class ProductTest extends TestCase
         $response = $this->getJson('/api/products');
         $response->assertStatus(200);
     }
+
+    public function test_unauthenticated_user_cannot_access_product_page(): void
+    {
+        $response = $this->get('/products');
+        $response->assertRedirect('/login');
+
+        $response->assertStatus(302);
+    }
 }
