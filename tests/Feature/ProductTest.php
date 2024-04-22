@@ -94,4 +94,10 @@ class ProductTest extends TestCase
         $response->assertStatus(302);
         $this->assertCount(0, Product::count());
     }
+
+    private function test_working_api(): void
+    {
+        $response = $this->getJson('/api/products');
+        $response->assertStatus(200);
+    }
 }
