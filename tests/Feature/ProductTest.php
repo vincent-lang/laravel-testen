@@ -99,6 +99,5 @@ class ProductTest extends TestCase
     {
         $response = $this->getJson('/api/products');
         $response->assertStatus(200);
-        no new code added in video
     }
 }
